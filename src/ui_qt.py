@@ -161,6 +161,7 @@ class ImageWindow(QMainWindow):
 
         self.current_image: ImageBuffer | None = None
         self._qimage: QImage | None = None
+        self.bezier_window = None  # Referencja do okna Béziera
 
         self.view = ImageGraphicsView()
         central_widget = QWidget()
@@ -242,6 +243,9 @@ class ImageWindow(QMainWindow):
         self._add_action(binarization_menu, "Selekcja entropii", self.threshold_entropy)
         self._add_action(binarization_menu, "Błąd minimalny", self.threshold_minimum_error)
         self._add_action(binarization_menu, "Rozmyty błąd minimalny", self.threshold_fuzzy_minimum_error)
+
+        tools_menu = menubar.addMenu("Narzędzia")
+        self._add_action(tools_menu, "Krzywe Béziera...", self.open_bezier_window)
 
     def _add_action(self, menu: QMenu, text: str, handler: Callable, shortcut: str | None = None) -> QAction:
         action = QAction(text, self)
@@ -504,6 +508,17 @@ class ImageWindow(QMainWindow):
             QMessageBox.information(self, "Informacja", "Najpierw wczytaj obraz.")
             return False
         return True
+
+    def open_bezier_window(self) -> None:
+        """Otwiera okno do rysowania krzywych Béziera."""
+        from .bezier_window import BezierWindow
+        
+        if self.bezier_window is None or not self.bezier_window.isVisible():
+            self.bezier_window = BezierWindow()
+            self.bezier_window.show()
+        else:
+            self.bezier_window.activateWindow()
+            self.bezier_window.raise_()
 
 
 def run_app() -> None:
