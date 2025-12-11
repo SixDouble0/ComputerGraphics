@@ -282,7 +282,7 @@ class BezierWindow(QWidget):
         weight_value_layout = QHBoxLayout()
         weight_value_layout.addWidget(QLabel("Waga:"))
         self.weight_spinbox = QDoubleSpinBox()
-        self.weight_spinbox.setRange(0.1, 10.0)
+        self.weight_spinbox.setRange(-10.0, 10.0)
         self.weight_spinbox.setValue(1.0)
         self.weight_spinbox.setSingleStep(0.1)
         weight_value_layout.addWidget(self.weight_spinbox)
