@@ -162,6 +162,7 @@ class ImageWindow(QMainWindow):
         self.current_image: ImageBuffer | None = None
         self._qimage: QImage | None = None
         self.bezier_window = None  # Referencja do okna Béziera
+        self.polygon_window = None  # Referencja do okna wielokątów
 
         self.view = ImageGraphicsView()
         central_widget = QWidget()
@@ -246,6 +247,7 @@ class ImageWindow(QMainWindow):
 
         tools_menu = menubar.addMenu("Narzędzia")
         self._add_action(tools_menu, "Krzywe Béziera...", self.open_bezier_window)
+        self._add_action(tools_menu, "Wielokąty + transformacje...", self.open_polygon_window)
 
     def _add_action(self, menu: QMenu, text: str, handler: Callable, shortcut: str | None = None) -> QAction:
         action = QAction(text, self)
@@ -519,6 +521,17 @@ class ImageWindow(QMainWindow):
         else:
             self.bezier_window.activateWindow()
             self.bezier_window.raise_()
+
+    def open_polygon_window(self) -> None:
+        """Otwiera okno do rysowania wielokątów i transformacji 2D (macierze jednorodne)."""
+        from .polygon_window import PolygonWindow
+
+        if self.polygon_window is None or not self.polygon_window.isVisible():
+            self.polygon_window = PolygonWindow()
+            self.polygon_window.show()
+        else:
+            self.polygon_window.activateWindow()
+            self.polygon_window.raise_()
 
 
 def run_app() -> None:
